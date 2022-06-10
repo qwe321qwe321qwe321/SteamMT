@@ -2,6 +2,7 @@
     "manifest_version": 3,
     "version": "1.0",
     "name": "SteamMT",
+    "description": "Steam Marketing Tool created by PeDev | Psychoflow Studio",
     "action": {
         "default_icon": "icon128.png"
     },
