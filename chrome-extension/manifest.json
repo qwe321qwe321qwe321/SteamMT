@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "version": "1.0",
-    "name": "Steamworks Wishlist Extension",
+    "name": "SteamMT",
     "action": {
         "default_icon": "icon128.png"
     },
