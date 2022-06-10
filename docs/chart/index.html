@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chart Tool</title>
+        <script src="./js/chart.min.js"></script>
+        <script src="./js/chartjs-plugin-datalabels@2.js"></script>
+        <script src="./index.js"></script>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body onload="onBodyLoad()">
+        <div class="input-region">
+            <span>Data: </span>
+            <input id="data-input" placeholder="Enter your data..."/>
+            <div>
+                <span>Only display top N: </span>
+                <input id="filter-input" placeholder="20"/>
+            </div>
+            <button onclick="onClickApplyButton()">Apply</button>
+        </div>
+        <hr>
+        <p style="color:red" id="msg"></p>
+        <p>
+            <input type="checkbox" id="percentage-checkbox">
+            <label>show percentage</label>
+        </p>
+        <div style="display: flex;">
+            <canvas id="myChart-Pie" class="chart"></canvas>
+            <canvas id="myChart-Bar" class="chart"></canvas>
+        </div>
+        <p style="font-size: small;">This project is on <a href="https://github.com/qwe321qwe321qwe321/Steam-Marketing-Tools">GitHub</a>. If you think this page could be improved, send me a pull request.</p>
+    </body>
+</html>

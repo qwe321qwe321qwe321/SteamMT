@@ -1,0 +1,94 @@
+body {
+    margin: 0;
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    min-width: 490px;
+    background: #171a21;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none #30363d;
+    background: #2a3f5a;
+    margin-bottom: 4px;
+    color: #67c1f5;
+}
+
+.green-button {
+    background: #5c7e10;
+    color: #e5e4dc;
+    padding: 10px 20px;
+    border: 1px solid #30363d;
+}
+
+.green-button:hover {
+  color: #FFFFFF;
+  background-color: #85b51a;
+}
+
+.green-button:active {
+  background-color: #85b51a;
+  transform: translateY(4px);
+}
+
+#delete-btn {
+    padding: 10px 20px;
+    background: #3c506d;
+    color: #67c1f5 ;
+}
+
+#delete-btn:hover {
+  background-color: #7C8EA3;
+  color: #B91C1C;
+}
+
+.blue-button {
+    background: rgba( 103, 193, 245, 0.1 );
+    color: #67c1f5;
+}
+
+.blue-button:hover {
+    background: #54a5d4;
+}
+
+.blue-button:active {
+  background-color: #54a5d4;
+  transform: translateY(4px);
+}
+
+ul {
+    margin-top: 20px;
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
+    margin-top: 5px;
+}
+
+a {
+    color: #67c1f5;
+}
+a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.field-name {
+    color: #f0f0f0;
+    font-size: 16px;
+}
+
+.dbclock-tip {
+    font-size: 12px;
+    color: #B91C1C;
+    text-align: center;
+}
+
+.link-li button {
+    padding: 5px 4px;
+    margin: 0px 10px;
+    font-size: 14px
+}

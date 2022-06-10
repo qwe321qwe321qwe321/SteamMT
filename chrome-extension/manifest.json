@@ -1,0 +1,24 @@
+{
+    "manifest_version": 3,
+    "version": "1.0",
+    "name": "Steamworks Wishlist Extension",
+    "action": {
+        "default_icon": "icon128.png"
+    },
+    "icons": {
+        "16": "icon32.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+    },
+    "content_scripts" : [
+        {
+            "js" : ["steamwork_regions.js"],
+            "css" : ["styles.css"],
+            "matches" : ["*://partner.steampowered.com/region/*"]
+        },
+        {
+            "js" : ["steam_store_page.js"],
+            "matches" : ["*://store.steampowered.com/app/*"]
+        }
+    ]
+}
