@@ -1,6 +1,6 @@
 (
     function() {
-        const CHART_URL = "https://qwe321qwe321qwe321.github.io/SteamMT/chart-tool/";
+        const CHART_URL = "https://qwe321qwe321qwe321.github.io/SteamMT/chart/";
         let categories = [];
         let newCategory = null;
         let newData = null;
