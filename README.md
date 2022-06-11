@@ -39,10 +39,12 @@ e.g. https://store.steampowered.com/app/1928690/Bionic_Bay/
 # Getting Started
 ## Install Chrome Extension
 It hasn't landed on Chrome Store, so you can only install it manually.
-* Clone this repo.
+* Clone this repo. (or Download zip and unzip it.)
 * Goto `chrome://extensions/`.
 * Turn on developer mode.
-* Push **Load unpacked extension** button and select the `chrome-extension` folder.
+* Push **Load unpacked** button and select the `chrome-extension` folder.
+
+Video: https://www.youtube.com/watch?v=JD7eneh7zZM
 
 
 # Chart Tool (for regional wishlists)
