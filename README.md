@@ -39,7 +39,7 @@ e.g. https://store.steampowered.com/app/1928690/Bionic_Bay/
 # Getting Started
 ## Install Chrome Extension
 It hasn't landed on Chrome Store, so you can only install it manually.
-* Download zip and unzip it.
+* Clone this repo.
 * Goto `chrome://extensions/`.
 * Turn on developer mode.
 * Push **Load unpacked extension** button and select the `chrome-extension` folder.
