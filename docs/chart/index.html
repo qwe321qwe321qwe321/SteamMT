@@ -8,8 +8,9 @@
         <link rel="stylesheet" href="index.css">
     </head>
     <body onload="onBodyLoad()">
+        <h2>Chart Tool <span style="font-size: small;">created by <a href="https://twitter.com/PeDev_">@PeDev_</a> for our game <a href="https://twitter.com/BionicBay">@Bionic Bay</a></span></h2>
         <div class="input-region">
-            <span>Data: </span>
+            <span>Data: [<a href="https://github.com/qwe321qwe321qwe321/SteamMT">help</a>]</span>
             <input id="data-input" placeholder="Enter your data..."/>
             <div>
                 <span>Only display top N: </span>
@@ -17,12 +18,16 @@
             </div>
             <button onclick="onClickApplyButton()">Apply</button>
         </div>
+        <div>All data is passed by GET params. This page doesn't store any private information. You can share the link to show anyone the same result. (even though it's LOOOOOOOOOOOOOOONG)</div>
         <hr>
-        <p style="color:red" id="msg"></p>
-        <p>
+        <div>
             <input type="checkbox" id="percentage-checkbox">
             <label>show percentage</label>
-        </p>
+            <span>|</span>
+            <input type="checkbox" id="rainbow-checkbox">
+            <label>rainbow</label>
+        </div>
+        <p style="color:red; display: none" id="error-msg">Invalid data. <a href="https://github.com/qwe321qwe321qwe321/SteamMT">Need help?</a></p>
         <div style="display: flex;">
             <canvas id="myChart-Pie" class="chart"></canvas>
             <canvas id="myChart-Bar" class="chart"></canvas>

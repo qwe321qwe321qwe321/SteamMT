@@ -2,6 +2,7 @@ let dataset = null;
 let datasetTitle = "TITLE";
 let displayTopN = 20;
 let showPercentage = false;
+let rainbowColor = false;
 let charts = [];
 
 function onBodyLoad() {
@@ -28,8 +29,8 @@ function onBodyLoad() {
             };
         }
     } catch {
-        document.getElementById("msg").innerText = "Invalid parameters.";
-        console.log("Invalid parameters.");
+        document.getElementById("error-msg").style.display = 'block';
+        console.log("Invalid data.");
         dataset = null;
         return;
     }
@@ -38,6 +39,12 @@ function onBodyLoad() {
         showPercentage = this.checked;
         updateAllCharts();
         console.log(showPercentage);
+    });
+
+    document.getElementById('rainbow-checkbox').addEventListener('change', function(){
+        rainbowColor = this.checked;
+        updateAllCharts();
+        console.log(rainbowColor);
     });
 
     createAllCharts();
@@ -67,7 +74,6 @@ function createAllCharts() {
     const xValues = displayData.map(item => item.x);
     const yValues = displayData.map(item => item.y);
     const length = Math.min(xValues.length, yValues.length);
-    console.log(length);
     if (length <= 0) {
         document.body.innerText = "There is no dataset.";
         return;
@@ -78,7 +84,10 @@ function createAllCharts() {
 }
 
 function updateAllCharts() {
+    const length = charts[0].data.datasets[0].backgroundColor.length;
+    const barColors = getBarColors(length, 0.7);
     for (c of charts) {
+        c.data.datasets[0].backgroundColor = barColors;
         c.options.plugins.datalabels.display = showPercentage;
         c.update();
     }
@@ -94,7 +103,8 @@ function getBarColors(length, alpha) {
     };
 
     const orderedColros = function(index, length, a) {
-        const hueIndex = index % 2 == 0 ? index : ((index + length / 2) % length); // to increase contract.
+        const hueIndex = rainbowColor ? index :
+            (index % 2 == 0 ? index : ((index + length / 2) % length)); // to increase contract.
         const h = Math.floor((hueIndex * 300 / length));
         const s = Math.floor(70);
         const l = Math.floor(100 * a);
