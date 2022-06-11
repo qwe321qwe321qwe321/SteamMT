@@ -19,6 +19,7 @@
         },
         {
             "js" : ["steam_store_page.js"],
+            "css" : ["styles.css"],
             "matches" : ["*://store.steampowered.com/app/*"]
         }
     ]
