@@ -53,7 +53,10 @@
         }
 
         function parseNumber(strNumber) {
-            return parseFloat(strNumber.replace(/\$|,/g, ''));
+            strNumber = strNumber.replace(/\$|,/g, ''); // Remove '$' char.
+            strNumber = strNumber.replace(/\((.+)\)/g, '-$1'); // Replace ($num) by -$num.
+            //console.log(strNumber);
+            return parseFloat(strNumber);
         }
 
         console.log(categories);
