@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+    <div class="steam-store-options">
+        <div class="toggle">
+            <input type="checkbox" id="store-page-extension-toggle" checked>
+            <label for="store-page-extension-toggle"></label>
+            <span class="toggle-text">Store Page Extension</span>
+        </div>
+        <div id="steam-store-options-content">
+            <div class="category">
+                <div class="category-title">Large Buttons</div>
+                <div class="category-content">
+                    <ul id="large-button-list">
+                        <li>
+                            <button class="delete-link-button">X</button>
+                            <span class="link-title">Steam Scout</span>
+                            <div>
+                                <span
+                                    class="link-format">https://www.togeproductions.com/SteamScout/steamAPI.php?appID=${appId}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="category">
+                <div class="category-title">Tiny Buttons</div>
+                <div class="category-content">
+                    <ul id="tiny-button-list">
+                        <li>
+                            <button class="delete-link-button">X</button>
+                            <span class="link-title">Steam Scout</span>
+                            <div>
+                                <span
+                                    class="link-format">https://www.togeproductions.com/SteamScout/steamAPI.php?appID=${appId}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="category">
+                <div class="category-title">+ New Button</div>
+                <div class="category-content">
+                    <div class="field-block">
+                        <span class="field-name">Name</span>
+                        <input type="text" id="input-link-name" placeholder="SteamDB">
+                    </div>
+                    <div class="field-block">
+                        <span class="field-name">Url</span>
+                        <input type="text" id="input-link-url" placeholder="https://steamdb.info/app/${appId}/graphs/">
+                    </div>
+                    <div class="field-block">
+                    <div class="field-name">Save as</div>
+                    <button class="green-button" id="save-as-large">LARGE BUTTON</button>
+                    <button class="green-button" id="save-as-tiny">TINY BUTTON</button>
+                    <button id="reset-links-button">RESET TO DEFAULT</button>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

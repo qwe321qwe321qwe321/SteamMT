@@ -1,13 +1,18 @@
 {
     "manifest_version": 3,
-    "version": "1.0",
+    "version": "1.1",
     "name": "SteamMT",
     "description": "Steam Marketing Tool is an extensions for analyzing marketing data on Steam and Steamworks.",
     "author": "PeDev | Psychoflow Studio",
     "homepage_url": "https://github.com/qwe321qwe321qwe321/SteamMT",
     "action": {
-        "default_icon": "icon128.png"
+        "default_icon": "icon128.png",
+        "default_popup": "popup.html"
     },
+    "options_page": "popup.html",
+    "permissions": [
+        "storage"
+    ],
     "icons": {
         "16": "icon32.png",
         "48": "icon48.png",
@@ -15,13 +20,11 @@
     },
     "content_scripts" : [
         {
-            "js" : ["steamwork_regions.js"],
-            "css" : ["styles.css"],
+            "js" : ["init.js", "steamwork_regions.js"],
             "matches" : ["*://partner.steampowered.com/region/*"]
         },
         {
-            "js" : ["steam_store_page.js"],
-            "css" : ["styles.css"],
+            "js" : ["init.js", "steam_store_page.js"],
             "matches" : ["*://store.steampowered.com/app/*"]
         }
     ]
