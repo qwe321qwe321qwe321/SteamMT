@@ -6,6 +6,7 @@ Steam Marketing Tool is an Chrome Extensions for analyzing marketing data on Ste
     - [Export Wishlist Chart](#export-wishlist-chart)
     - [Export CSV](#export-csv)
   - [Extend Store Page for better navigation](#extend-store-page-for-better-navigation)
+    - [Customization](#customization)
 - [Getting Started](#getting-started)
   - [Install Chrome Extension](#install-chrome-extension)
 - [Chart Tool (for regional wishlists)](#chart-tool-for-regional-wishlists)
@@ -42,6 +43,9 @@ e.g. https://store.steampowered.com/app/1928690/Bionic_Bay/
 If you don't like the default buttons, feel free to add/remove any links on your own:/
 
 > If you know of other powerful websites for Steam marketing/analysis, please share them to [**Issues**](https://github.com/qwe321qwe321qwe321/SteamMT/issues). I'll appreciate it.
+
+
+https://user-images.githubusercontent.com/23000374/229375397-bc41ce0c-5b95-49ec-b25a-3dd60f2ef9b4.mp4
 
 
 
