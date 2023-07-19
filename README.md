@@ -1,6 +1,6 @@
 # Steam Marketing Tool
+![](./screenshots/steamMT_overview.png)
 Steam Marketing Tool is an Chrome Extensions for analyzing marketing data on Steam and Steamworks.
-
 - [Features](#features)
   - [Export Regional Wishlists on Steamworks](#export-regional-wishlists-on-steamworks)
     - [Export Wishlist Chart](#export-wishlist-chart)
