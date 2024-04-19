@@ -48,6 +48,10 @@ class SteamMTClass {
                     url: "https://vginsights.com/game/${appId}"
                 },
                 {
+                    name: "SteamData.Ninja",
+                    url: "https://www.steamdata.ninja/game/${appId}"
+                },
+                {
                     name: "Followers (realtime)",
                     url: "https://steamcommunity.com/search/groups/#text=${appId}"   
                 }
