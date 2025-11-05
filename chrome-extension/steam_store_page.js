@@ -8,10 +8,13 @@
 
             const otherSiteInfoElement = document.querySelector("div.apphub_OtherSiteInfo");
             const communityElement = otherSiteInfoElement.querySelector("a");
-            const queueActionCtnElement = document.getElementById("queueActionsCtn");
+            const queueCtnElement = document.getElementById("queueCtn");
             // insert to top one child.
             const queueSmallButtonDivElement = document.createElement("div");
-            queueActionCtnElement.insertBefore(queueSmallButtonDivElement, queueActionCtnElement.firstChild);
+            queueSmallButtonDivElement.style.paddingLeft = "16px";
+            queueSmallButtonDivElement.style.paddingRight = "16px";
+            
+            queueCtnElement.insertBefore(queueSmallButtonDivElement, queueCtnElement.firstChild);
             function createNewLargeButton(text, url) {
                 const newElement = communityElement.cloneNode(true);
                 newElement.classList.add("ex-site-button");
