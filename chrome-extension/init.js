@@ -48,13 +48,13 @@ class SteamMTClass {
                     url: "https://vginsights.com/game/${appId}"
                 },
                 {
-                    name: "SteamData.Ninja",
-                    url: "https://www.steamdata.ninja/game/${appId}"
-                },
-                {
                     name: "Followers (realtime)",
                     url: "https://steamcommunity.com/search/groups/#text=${appId}"   
-                }
+                },
+                {
+                    name: "Review Explorer",
+                    url: "https://project.joshhills.dev/steam-review-explorer/game/${appId}"
+                },
             ]
         }
         this.savePreference()
