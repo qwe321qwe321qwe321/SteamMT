@@ -8,7 +8,7 @@ Steam Marketing Tool is a Chrome Extension for analyzing marketing data on Steam
   - [Export Regional Wishlists on Steamworks](#export-regional-wishlists-on-steamworks)
     - [Export Wishlist Chart](#export-wishlist-chart)
     - [Export CSV](#export-csv)
-  - [Open Steam Wishlist History in External Tool](#open-steam-wishlist-history-in-external-tool)
+  - [Open Steam Wishlist History in External Tool by HTMAG](#open-steam-wishlist-history-in-external-tool-by-htmag)
 - [Getting Started](#getting-started)
   - [Install Chrome Extension](#install-chrome-extension)
 - [Chart Tool (for regional wishlists)](#chart-tool-for-regional-wishlists)
