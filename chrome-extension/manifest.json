@@ -21,11 +21,19 @@
     "content_scripts" : [
         {
             "js" : ["init.js", "steamwork_regions.js"],
-            "matches" : ["*://partner.steampowered.com/region/*"]
+            "matches" : ["*://partner.steampowered.com/app/wishlist/*"]
+        },
+        {
+            "js" : ["init.js", "steamworks_wishlist.js"],
+            "matches" : ["*://partner.steampowered.com/*"]
         },
         {
             "js" : ["init.js", "steam_store_page.js"],
             "matches" : ["*://store.steampowered.com/app/*"]
+        },
+        {
+            "js" : ["init.js", "wishlist_tool_bridge.js"],
+            "matches" : ["https://howtomarketagame.com/wishlists*"]
         }
     ]
 }

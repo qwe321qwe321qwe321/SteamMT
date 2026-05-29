@@ -1,4 +1,5 @@
 const CHROME_STORAGE_KEY = "SteamMTPreference"
+const WISHLIST_IMPORT_STORAGE_KEY = "SteamMTPendingWishlistImport"
 
 class SteamMTClass {
     constructor() {
@@ -79,6 +80,24 @@ class SteamMTClass {
     savePreference() {
         chrome.storage.sync.set({[CHROME_STORAGE_KEY]: this.preference}).then(() => {
             console.log("[SteamMT] Saved to chrome storage.");
+        })
+    }
+
+    savePendingWishlistImport(data) {
+        return chrome.storage.local.set({[WISHLIST_IMPORT_STORAGE_KEY]: data}).then(() => {
+            console.log("[SteamMT] Saved pending wishlist import.");
+        })
+    }
+
+    getPendingWishlistImport() {
+        return chrome.storage.local.get([WISHLIST_IMPORT_STORAGE_KEY]).then(result => {
+            return result[WISHLIST_IMPORT_STORAGE_KEY] || null;
+        })
+    }
+
+    clearPendingWishlistImport() {
+        return chrome.storage.local.remove(WISHLIST_IMPORT_STORAGE_KEY).then(() => {
+            console.log("[SteamMT] Cleared pending wishlist import.");
         })
     }
 }

@@ -3,30 +3,18 @@
 Steam Marketing Tool is a Chrome Extension for analyzing marketing data on Steam and Steamworks.
 - [Steam Marketing Tool](#steam-marketing-tool)
 - [Features](#features)
+  - [Extend Store Page for better navigation](#extend-store-page-for-better-navigation)
+    - [Customization](#customization)
   - [Export Regional Wishlists on Steamworks](#export-regional-wishlists-on-steamworks)
     - [Export Wishlist Chart](#export-wishlist-chart)
     - [Export CSV](#export-csv)
-  - [Extend Store Page for better navigation](#extend-store-page-for-better-navigation)
-    - [Customization](#customization)
+  - [Open Steam Wishlist History in External Tool](#open-steam-wishlist-history-in-external-tool)
 - [Getting Started](#getting-started)
   - [Install Chrome Extension](#install-chrome-extension)
 - [Chart Tool (for regional wishlists)](#chart-tool-for-regional-wishlists)
     - [GET Params](#get-params)
 
 # Features
-## Export Regional Wishlists on Steamworks
-Matching URL: `*://partner.steampowered.com/region/*`
-
-e.g. https://partner.steampowered.com/region/
-![](./screenshots/screenshot_1.png)
-### Export Wishlist Chart
-Passing data to [Chart Tool](#chart-tool-for-regional-wishlists) to show the regional wishlist charts.
-![](./screenshots/screenshot_3.png)
-
-### Export CSV
-Export and download a CSV file.
-![](./screenshots/screenshot_4.png)
-
 ## Extend Store Page for better navigation
 Matching URL: `*://store.steampowered.com/app/*`
 
@@ -47,8 +35,44 @@ Don't like the default buttons? Feel free to add/remove any links on your own:/
 
 > If you know of other powerful websites for Steam marketing/analysis, please share them to [**Issues**](https://github.com/qwe321qwe321qwe321/SteamMT/issues). I'd appreciate it.
 
-
 https://user-images.githubusercontent.com/23000374/229375397-bc41ce0c-5b95-49ec-b25a-3dd60f2ef9b4.mp4
+
+## Export Regional Wishlists on Steamworks
+Matching URL: `*://partner.steampowered.com/app/wishlist/*`
+
+Steamworks has moved regional wishlist data into the app wishlist report page. SteamMT now also adds `Export Wishlist Chart` and `Export CSV` buttons to:
+* `Wishlists By Region`
+* `Wishlists By Country`
+
+On the app wishlist page, these exports use whatever date range is currently shown on the page. They do not force `all history`.
+
+### Export Wishlist Chart
+Passing data to [Chart Tool](#chart-tool-for-regional-wishlists) to show the regional wishlist charts.
+![](./screenshots/screenshot_3.png)
+
+### Export CSV
+Export and download a CSV file.
+![](./screenshots/screenshot_4.png)
+
+## Open Steam Wishlist History in External Tool by HTMAG
+Matching URL: `*://partner.steampowered.com/app/wishlist/*`
+
+SteamMT adds an `Open in Wishlist Tool` button next to the `Wishlist Action Summary` CSV link on the wishlist report page.
+
+![](./screenshots/screenshot_5.png)
+
+To learn more about this tool, watch the [video](https://www.youtube.com/watch?v=GJvARUZqzDs).
+
+Clicking that button will:
+* jump to `View most recent > all history` automatically when needed
+* download the per-game `Wishlist Action Summary, all history` CSV from Steamworks
+* open `https://howtomarketagame.com/wishlists/` in a new tab
+* auto-import the CSV into the chart tool
+
+Notes:
+* This works by using the extension as a bridge. The external website does not expose a public import API.
+* SteamMT validates that the downloaded CSV contains the expected header: `DateLocal,Game,Adds,Deletes,PurchasesAndActivations,Gifts`
+* If Steamworks gives you the wrong CSV file, SteamMT will stop instead of importing a studio-wide summary by mistake.
 
 
 
