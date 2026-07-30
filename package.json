@@ -1,0 +1,7 @@
+{
+  "name": "steammt-tests",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}

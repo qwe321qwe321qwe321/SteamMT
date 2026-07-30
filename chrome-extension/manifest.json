@@ -20,7 +20,7 @@
     },
     "content_scripts" : [
         {
-            "js" : ["init.js", "steamwork_regions.js"],
+            "js" : ["utf8_base64.js", "init.js", "steamwork_regions.js"],
             "matches" : ["*://partner.steampowered.com/app/wishlist/*"]
         },
         {

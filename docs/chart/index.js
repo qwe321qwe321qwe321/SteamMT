@@ -15,7 +15,7 @@ function onBodyLoad() {
         }
         document.getElementById('filter-input').value = displayTopN;
 
-        const parsedDataset = JSON.parse(atob(dataString));
+        const parsedDataset = JSON.parse(SteamMTBase64.decode(dataString));
         console.log(parsedDataset);
 
         datasetTitle = parsedDataset.title;

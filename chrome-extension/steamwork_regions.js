@@ -213,7 +213,7 @@
             const paramDataJson = JSON.stringify(paramData);
             console.log(paramData);
             console.log(paramDataJson);
-            const paramDataBase64 = btoa(paramDataJson);
+            const paramDataBase64 = SteamMTBase64.encode(paramDataJson);
             console.log(paramDataBase64);
             //console.log(JSON.parse(paramDataJson));
             //console.log(`xValues=${xValues}&yValues=${yValues}`);
