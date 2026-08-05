@@ -79,8 +79,9 @@
         }
 
         function parseWishlistReportPage() {
-            parseWishlistSummaryTable("#leftRegion", "Wishlists By Region");
-            parseWishlistSummaryTable("#rightCountry", "Wishlists By Country");
+            parseWishlistSummaryTable("#leftRegion, #rightRegion", "Wishlists By Region");
+            parseWishlistSummaryTable("#leftCountry, #rightCountry", "Wishlists By Country");
+            parseWishlistSummaryTable("#leftLanguage, #rightLanguage", "Wishlists By Language");
         }
 
         function parseWishlistSummaryTable(containerSelector, fallbackTitle) {
