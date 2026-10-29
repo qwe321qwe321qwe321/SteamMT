@@ -41,12 +41,33 @@
             }
     
             function getMicroTrailerLink() {
+                // New store page (2025+): trailers are listed in the carousel's data-props,
+                // and the micro trailer sits next to the video manifests.
+                const manifestLink = getFirstTrailerManifestLink();
+                if (manifestLink) {
+                    return manifestLink.replace(/[^\/]*$/, "microtrailer.webm");
+                }
+                // Legacy store page: derive from the movie thumbnail.
                 const firstVideoLink = getFirstVideoLink();
                 if (firstVideoLink) {
                     return firstVideoLink.replace(/(.*\/steam\/apps)\/([0-9]+)\/(.*)/, "$1/$2/microtrailer.webm");
                 }
             }
-            
+
+            function getFirstTrailerManifestLink() {
+                const el = document.querySelector("[data-featuretarget='gamehighlight-desktopcarousel'][data-props]");
+                if (!el) {
+                    return null;
+                }
+                try {
+                    const trailer = JSON.parse(el.dataset.props).trailers?.[0];
+                    const manifest = trailer?.hlsManifest || trailer?.dashManifests?.[0];
+                    return manifest ? manifest.split("?")[0] : null;
+                } catch {
+                    return null;
+                }
+            }
+
             function getFirstVideoLink() {
                 const el = document.querySelector(".highlight_strip_item.highlight_strip_movie > img.movie_thumb");
                 return el ? el.src : null;
