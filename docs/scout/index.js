@@ -346,6 +346,21 @@ function buildRows() {
     return rows;
 }
 
+// Same buckets as the store page's game_review_summary colors.
+// Score 0 is "N user reviews", which Steam shows when there are too few to rate.
+function ratingClass(score) {
+    if (score >= 6) {
+        return "rating-positive";
+    }
+    if (score === 5) {
+        return "rating-mixed";
+    }
+    if (score >= 1) {
+        return "rating-negative";
+    }
+    return "rating-none";
+}
+
 function positiveRatio(row) {
     return row.total > 0 ? row.positive / row.total : -1;
 }
@@ -364,9 +379,6 @@ function compareRows(a, b) {
             break;
         case "score":
             d = a.score - b.score || a.total - b.total;
-            break;
-        case "supported":
-            d = (a.supported ? 1 : 0) - (b.supported ? 1 : 0) || a.total - b.total;
             break;
         default:
             d = a[sortKey] - b[sortKey];
@@ -449,9 +461,11 @@ function renderStats() {
     if (all.total > 0) {
         $("stat-positive").textContent = Math.round(all.positive / all.total * 100) + "%";
         $("stat-positive-desc").textContent = all.scoreDesc;
+        $("stat-positive-desc").className = "stat-note " + ratingClass(all.score);
     } else {
         $("stat-positive").textContent = "-";
         $("stat-positive-desc").textContent = "";
+        $("stat-positive-desc").className = "stat-note";
     }
 
     const withReviews = rows.filter((r) => r.total > 0).length;
@@ -479,7 +493,7 @@ function renderTable() {
     if (view.rows.length === 0) {
         const tr = document.createElement("tr");
         const td = cell(tr, "No reviews match these filters.");
-        td.colSpan = 8;
+        td.colSpan = 7;
         tbody.replaceChildren(tr);
     } else {
         tbody.replaceChildren(...view.rows.map((row) => rowElement(row, total)));
@@ -518,32 +532,82 @@ function rowElement(row, total) {
         tr.className = "is-empty";
     }
 
-    const nameCell = cell(tr, row.name);
-    if (row.isOther) {
-        nameCell.title = "Counted in the total but not tagged with one of Steam's store languages";
-    }
-
     cell(tr, row.failed ? "-" : formatShare(total > 0 ? row.total / total : 0), "num");
+
+    tr.appendChild(nameCellElement(row));
 
     if (row.failed) {
         cell(tr, "-", "num");
         cell(tr, "-", "num");
-        cell(tr, "-", "num");
-        cell(tr, "-", "num");
         cell(tr, "didn't load");
+        cell(tr, "-", "num");
+        cell(tr, "-", "num");
     } else {
         cell(tr, formatCount(row.total), "num");
+        cell(tr, row.total > 0 ? Math.round(positiveRatio(row) * 100) + "%" : "-", "num");
+        cell(tr, row.scoreDesc || "-", row.scoreDesc ? ratingClass(row.score) : "");
         cell(tr, formatCount(row.positive), "num");
         cell(tr, formatCount(row.negative), "num");
-        cell(tr, row.total > 0 ? Math.round(positiveRatio(row) * 100) + "%" : "-", "num");
-        cell(tr, row.scoreDesc || "-");
-    }
-
-    const supportedCell = cell(tr, row.supported ? "✓" : "", "supported");
-    if (row.supported) {
-        supportedCell.setAttribute("aria-label", "Supported");
     }
     return tr;
+}
+
+// ✓ before the name when the game supports the language, link to its reviews after it.
+function nameCellElement(row) {
+    const td = document.createElement("td");
+    td.className = "col-name";
+    if (row.isOther) {
+        td.title = "Counted in the total but not tagged with one of Steam's store languages";
+    }
+
+    const mark = document.createElement("span");
+    mark.className = "supported-mark";
+    if (row.supported) {
+        mark.textContent = "✓";
+        mark.title = "The game supports this language";
+        mark.setAttribute("role", "img");
+        mark.setAttribute("aria-label", "Supported");
+    }
+    const name = document.createElement("span");
+    name.textContent = row.name;
+    td.append(mark, name);
+
+    if (hasReviewsPage(row)) {
+        const a = document.createElement("a");
+        a.className = "review-link";
+        a.href = reviewsPageUrl(currentResult.appId, row.code);
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.title = "Read " + row.name + " reviews on Steam";
+        a.setAttribute("aria-label", a.title);
+        a.appendChild(externalLinkIcon());
+        td.appendChild(a);
+    }
+    return td;
+}
+
+function externalLinkIcon() {
+    const svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("viewBox", "0 0 12 12");
+    svg.setAttribute("aria-hidden", "true");
+    const path = document.createElementNS(SVG_NS, "path");
+    path.setAttribute("d", "M4.5 2.5H1V11h8.5V7.5M7 1h4v4M11 1 5.5 6.5");
+    svg.appendChild(path);
+    return svg;
+}
+
+// "Untagged" has no language to filter by, and empty languages have nothing to read.
+function hasReviewsPage(row) {
+    return !row.isOther && (row.total > 0 || row.failed);
+}
+
+// The community reviews page takes the same language codes as the API.
+function reviewsPageUrl(appId, languageCode) {
+    const params = new URLSearchParams({
+        "browsefilter": "toprated",
+        "filterLanguage": languageCode,
+    });
+    return "https://steamcommunity.com/app/" + appId + "/reviews/?" + params.toString();
 }
 
 // ---------- pie chart ----------
@@ -722,18 +786,19 @@ function hideNotice() {
 
 function exportTable() {
     const total = currentResult.summaries.all.total;
-    const lines = [["Language", "Code", "Share %", "Reviews", "Positive", "Negative", "% Positive", "Steam rating", "Game supports"]];
+    const lines = [["Share %", "Language", "Code", "Reviews", "% Positive", "Steam rating", "Positive", "Negative", "Game supports", "Steam reviews"]];
     visibleRows().rows.forEach((row) => {
         lines.push([
+            row.failed || total === 0 ? "" : (row.total / total * 100).toFixed(2),
             row.name,
             row.code,
-            row.failed || total === 0 ? "" : (row.total / total * 100).toFixed(2),
             row.failed ? "" : row.total,
-            row.failed ? "" : row.positive,
-            row.failed ? "" : row.negative,
             row.total > 0 ? (positiveRatio(row) * 100).toFixed(1) : "",
             row.scoreDesc,
+            row.failed ? "" : row.positive,
+            row.failed ? "" : row.negative,
             row.supported === null ? "" : (row.supported ? "yes" : "no"),
+            hasReviewsPage(row) ? reviewsPageUrl(currentResult.appId, row.code) : "",
         ]);
     });
     return lines;

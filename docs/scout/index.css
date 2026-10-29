@@ -23,6 +23,11 @@
     --pie-4: #c98500;
     --pie-5: #d55181;
     --pie-rest: #5b6779;
+    /* Steam store's review summary colors */
+    --rating-positive: #66c0f4;
+    --rating-mixed: #b9a074;
+    --rating-negative: #a34c25;
+    --rating-none: #929396;
     color-scheme: dark;
 }
 
@@ -52,6 +57,11 @@
         --pie-4: #eda100;
         --pie-5: #e87ba4;
         --pie-rest: #aab3bd;
+        /* same hues, darkened to stay readable on white */
+        --rating-positive: #2a75b0;
+        --rating-mixed: #8c7340;
+        --rating-negative: #a34c25;
+        --rating-none: #75767a;
         color-scheme: light;
     }
 }
@@ -63,7 +73,7 @@
 body {
     margin: 0 auto;
     padding: 24px 16px 40px;
-    max-width: 1080px;
+    max-width: 880px;
     font-family: -apple-system, "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
     font-size: 14px;
     line-height: 1.45;
@@ -416,15 +426,21 @@ tbody tr:hover td {
 }
 
 /* keep the language name in view when the table scrolls sideways on narrow screens */
-th:first-child,
-td:first-child {
+.col-name {
     position: sticky;
     left: 0;
     z-index: 1;
+    /* shrink to the longest name; the table's spare width goes to the other columns */
+    width: 1%;
 }
 
-td:first-child {
+td.col-name {
     background: var(--surface);
+}
+
+/* line the header up with the names, past the ✓ slot */
+th.col-name {
+    padding-left: 30px;
 }
 
 tr.is-empty td {
@@ -436,13 +452,48 @@ tr.is-other td {
     font-style: italic;
 }
 
-.col-supported {
-    text-align: center;
+.supported-mark {
+    display: inline-block;
+    width: 18px;
+    color: var(--good);
 }
 
-td.supported {
-    text-align: center;
-    color: var(--good);
+tr.is-empty .supported-mark {
+    color: inherit;
+}
+
+.review-link {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 4px;
+    line-height: 0;
+    vertical-align: middle;
+}
+
+.review-link svg {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.rating-positive {
+    color: var(--rating-positive);
+}
+
+.rating-mixed {
+    color: var(--rating-mixed);
+}
+
+.rating-negative {
+    color: var(--rating-negative);
+}
+
+.rating-none {
+    color: var(--rating-none);
 }
 
 .table-note {

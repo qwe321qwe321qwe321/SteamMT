@@ -50,11 +50,19 @@ class SteamMTClass {
                 },
                 {
                     name: "Followers (realtime)",
-                    url: "https://steamcommunity.com/search/groups/#text=${appId}"   
+                    url: "https://steamcommunity.com/search/groups/#text=${appId}"
+                },
+                {
+                    name: "Followers (DLC)",
+                    url: "https://store.steampowered.com/dlc/${appId}/_/"
                 },
                 {
                     name: "Review Explorer",
                     url: "https://project.joshhills.dev/steam-review-explorer/game/${appId}"
+                },
+                {
+                    name: "Games Popularity",
+                    url: "https://games-popularity.com/overview/${appId}"
                 },
             ]
         }
