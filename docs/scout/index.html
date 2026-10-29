@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Steam Scout Alt</title>
+        <meta name="description" content="Break down Steam reviews by language. Runs entirely in your browser.">
+        <link rel="stylesheet" href="index.css">
+        <script src="index.js" defer></script>
+    </head>
+    <body>
+        <header class="page-header">
+            <div class="crumbs"><a href="https://github.com/qwe321qwe321qwe321/SteamMT">SteamMT</a> / Steam Scout Alt</div>
+            <h1>Steam Scout Alt</h1>
+            <p class="lede">
+                Steam reviews broken down by language.
+                A static remake of <a href="https://www.togeproductions.com/SteamScout/steamAPI.php">Steam Scout</a>,
+                rebuilt after Steam <a href="https://steamcommunity.com/groups/steamworks/announcements/detail/676258795703241581?l=english">retired the old reviews endpoint</a>.
+            </p>
+        </header>
+
+        <form id="lookup-form" class="controls" autocomplete="off">
+            <label class="field field-app">
+                <span class="field-label">Game</span>
+                <input id="app-input" type="text" inputmode="text" placeholder="AppID or store URL, e.g. 413150" spellcheck="false">
+            </label>
+            <label class="field">
+                <span class="field-label">Reviewers</span>
+                <select id="purchase-select">
+                    <option value="all">All reviewers</option>
+                    <option value="steam">Bought on Steam</option>
+                    <option value="key">Not bought on Steam</option>
+                </select>
+            </label>
+            <label class="check">
+                <input id="offtopic-check" type="checkbox">
+                <span>Include off-topic review activity</span>
+            </label>
+            <button id="lookup-button" class="green-button" type="submit">Look up</button>
+        </form>
+        <p id="form-error" class="form-error" hidden></p>
+
+        <div id="progress" class="progress" hidden>
+            <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+            <span id="progress-text" class="progress-text"></span>
+        </div>
+
+        <div id="notice" class="notice" hidden>
+            <span id="notice-text"></span>
+            <button id="retry-button" class="text-button" type="button" hidden>Retry</button>
+        </div>
+
+        <main id="results" hidden>
+            <section class="game">
+                <img id="game-image" class="game-image" alt="" hidden>
+                <div class="game-meta">
+                    <h2 id="game-name"></h2>
+                    <div id="game-sub" class="game-sub"></div>
+                    <div id="game-links" class="game-links"></div>
+                </div>
+            </section>
+
+            <section class="stats" aria-label="Summary">
+                <div class="stat">
+                    <div class="stat-label">Total reviews</div>
+                    <div id="stat-total" class="stat-value"></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Positive</div>
+                    <div id="stat-positive" class="stat-value"></div>
+                    <div id="stat-positive-desc" class="stat-note"></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Languages with reviews</div>
+                    <div id="stat-languages" class="stat-value"></div>
+                    <div id="stat-languages-note" class="stat-note"></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Written in a supported language</div>
+                    <div id="stat-supported" class="stat-value"></div>
+                    <div id="stat-supported-note" class="stat-note"></div>
+                </div>
+            </section>
+
+            <div class="table-bar">
+                <label class="check">
+                    <input id="hide-empty-check" type="checkbox" checked>
+                    <span>Hide languages with no reviews</span>
+                </label>
+                <div class="table-actions">
+                    <button id="copy-button" class="text-button" type="button">Copy table</button>
+                    <button id="csv-button" class="text-button" type="button">Download CSV</button>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table id="review-table">
+                    <thead>
+                        <tr>
+                            <th><button type="button" data-sort="name">Language</button></th>
+                            <th class="num"><button type="button" data-sort="share">Share</button></th>
+                            <th class="num"><button type="button" data-sort="total">Reviews</button></th>
+                            <th class="num"><button type="button" data-sort="positive">Positive</button></th>
+                            <th class="num"><button type="button" data-sort="negative">Negative</button></th>
+                            <th class="num"><button type="button" data-sort="ratio">% Positive</button></th>
+                            <th><button type="button" data-sort="score">Steam rating</button></th>
+                            <th class="col-supported"><button type="button" data-sort="supported">Game supports</button></th>
+                        </tr>
+                    </thead>
+                    <tbody id="review-rows"></tbody>
+                </table>
+            </div>
+            <p id="hidden-note" class="table-note"></p>
+
+            <section id="chart-section" class="chart-section" aria-labelledby="chart-title">
+                <h3 id="chart-title" class="section-title">Share of reviews</h3>
+                <div class="chart-panel">
+                    <svg id="pie" class="pie" viewBox="0 0 200 200" role="img" aria-label="Pie chart of reviews by language"></svg>
+                    <ul id="pie-legend" class="pie-legend"></ul>
+                </div>
+                <div id="pie-tooltip" class="pie-tooltip" hidden></div>
+            </section>
+        </main>
+
+        <footer class="page-footer">
+            <p>
+                Counts come from Steam's <a href="https://partner.steamgames.com/doc/webapi/IUserReviewsService">IUserReviewsService</a> API
+                and are fetched by your own browser, so nothing goes through a server. Steam caches each answer for up to 10 minutes.
+            </p>
+            <p>
+                Off-topic review activity (review bombs) is left out unless you tick the box, same as the store page.
+                "Untagged" is whatever Steam counts in the total but doesn't tag with one of its 30 store languages.
+            </p>
+            <p>This project is on <a href="https://github.com/qwe321qwe321qwe321/SteamMT">GitHub</a>. If you think this page could be improved, send me a pull request.</p>
+        </footer>
+    </body>
+</html>

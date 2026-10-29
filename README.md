@@ -13,6 +13,8 @@ Steam Marketing Tool is a Chrome Extension for analyzing marketing data on Steam
   - [Install Chrome Extension](#install-chrome-extension)
 - [Chart Tool (for regional wishlists)](#chart-tool-for-regional-wishlists)
     - [GET Params](#get-params)
+- [Steam Scout Alt (reviews by language)](#steam-scout-alt-reviews-by-language)
+    - [GET Params](#get-params-1)
 
 # Features
 ## Extend Store Page for better navigation
@@ -21,7 +23,7 @@ Matching URL: `*://store.steampowered.com/app/*`
 e.g. https://store.steampowered.com/app/1928690/Bionic_Bay/
 ![](./screenshots/screenshot_2.png)
 * [SteamDB](https://steamdb.info/)
-* [Steam Scout](https://www.togeproductions.com/SteamScout/steamAPI.php) - To break down Steam reviews by languages.
+* [Steam Scout Alt](#steam-scout-alt-reviews-by-language) - To break down Steam reviews by languages. A static remake of [Steam Scout](https://www.togeproductions.com/SteamScout/steamAPI.php), which stopped working when Steam retired its old reviews endpoint in Oct 2026.
 * [Gamalytic](https://gamalytic.com/)
 * [VG Insights](https://vginsights.com/)
 * Real-time followers - https://steamcommunity.com/search/groups/
@@ -99,5 +101,19 @@ The input data is passed through GET parameters, and this page doesn't store any
 | --- | --- | --- |
 | data | Base64 Encode object { title: <_String_>, xValues: [...<_String_>], yValues: [...<_Number_>] } | The input data for charts. |
 | topN | Number (> 0) | Only display top N results. |
+
+# Steam Scout Alt (reviews by language)
+https://qwe321qwe321qwe321.github.io/SteamMT/scout/
+
+Breaks down a game's Steam reviews by language: share, positive/negative, the Steam rating in each language, and whether the game supports that language.
+
+It's a static page with no server behind it. Your browser asks Steam's Web API ([IUserReviewsService](https://partner.steamgames.com/doc/webapi/IUserReviewsService)) directly, one request per language, through JSONP because the API doesn't send CORS headers.
+
+### GET Params
+| Param | Type | Description |
+| --- | --- | --- |
+| appID | Number | The Steam AppID. Same name as Steam Scout's, so old Steam Scout links work by swapping the host. |
+| purchase | `all` (default), `steam`, `key` | Which reviewers to count: everyone, people who bought on Steam, or people who didn't. |
+| offtopic | `1` | Include off-topic review activity (review bombs). Left out by default, same as the store page. |
 
 

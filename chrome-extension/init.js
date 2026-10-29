@@ -19,8 +19,8 @@ class SteamMTClass {
             storePageExtension: true,
             largeButtons: [
                 {
-                    name: "Steam Scout",
-                    url: "https://www.togeproductions.com/SteamScout/steamAPI.php?appID=${appId}"
+                    name: "Steam Scout Alt",
+                    url: "https://qwe321qwe321qwe321.github.io/SteamMT/scout/?appID=${appId}"
                 },
                 {
                     name: "SteamDB", 
@@ -33,8 +33,8 @@ class SteamMTClass {
             ],
             tinyButtons:[
                 {
-                    name: "Reviews Language", 
-                    url: "https://www.togeproductions.com/SteamScout/steamAPI.php?appID=${appId}"
+                    name: "Reviews Language",
+                    url: "https://qwe321qwe321qwe321.github.io/SteamMT/scout/?appID=${appId}"
                 },
                 {
                     name: "SteamDB",
