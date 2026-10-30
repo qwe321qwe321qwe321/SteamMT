@@ -142,7 +142,23 @@ h1 {
     color: var(--ink-2);
 }
 
+.field-hint {
+    color: var(--ink-3);
+}
+
+.date-range {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.date-sep {
+    color: var(--ink-3);
+}
+
 input[type=text],
+input[type=date],
 select {
     height: 36px;
     padding: 0 10px;
@@ -153,8 +169,14 @@ select {
     border-radius: 3px;
 }
 
+input[type=date] {
+    width: 150px;
+    max-width: calc(50vw - 40px);
+}
+
 @media (prefers-color-scheme: light) {
     input[type=text],
+    input[type=date],
     select {
         border-color: var(--line);
     }

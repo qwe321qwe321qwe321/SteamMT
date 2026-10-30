@@ -117,5 +117,7 @@ It's a static page with no server behind it. Your browser asks Steam's Web API (
 | appID | Number | The Steam AppID. Same name as Steam Scout's, so old Steam Scout links work by swapping the host. |
 | purchase | `all` (default), `steam`, `key` | Which reviewers to count: everyone, people who bought on Steam, or people who didn't. |
 | offtopic | `1` | Include off-topic review activity (review bombs). Left out by default, same as the store page. |
+| from | Unix timestamp (seconds) | Only count reviews written at or after this time. The page shows it as a date in your local time zone. |
+| to | Unix timestamp (seconds) | Only count reviews written at or before this time. Either end can be left out. |
 
 

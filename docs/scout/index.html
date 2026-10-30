@@ -32,6 +32,15 @@
                     <option value="key">Not bought on Steam</option>
                 </select>
             </label>
+            <div class="field">
+                <span class="field-label" id="date-label">Written between <span class="field-hint">(your local time)</span></span>
+                <div class="date-range" role="group" aria-labelledby="date-label">
+                    <input id="from-input" type="date" aria-label="From date">
+                    <span class="date-sep">–</span>
+                    <input id="to-input" type="date" aria-label="To date">
+                    <button id="clear-dates-button" class="text-button" type="button" hidden>Any time</button>
+                </div>
+            </div>
             <label class="check">
                 <input id="offtopic-check" type="checkbox">
                 <span>Include off-topic review activity</span>
@@ -64,6 +73,7 @@
                 <div class="stat">
                     <div class="stat-label">Total reviews</div>
                     <div id="stat-total" class="stat-value"></div>
+                    <div id="stat-total-note" class="stat-note"></div>
                 </div>
                 <div class="stat">
                     <div class="stat-label">Positive</div>

@@ -10,6 +10,11 @@ const PIE_RADIUS = 98;
 // Top languages get their own slice; the rest share one so the pie stays readable.
 const PIE_SLICES = 5;
 
+// Steam ignores a date range unless both ends are set, and takes a start of 0 as unset,
+// so an open end is filled with the earliest and latest times the API accepts.
+const RANGE_MIN = 1;
+const RANGE_MAX = 4294967295;
+
 const MAX_PARALLEL = 4;
 const RETRY_DELAYS = [1500, 4000];
 const REQUEST_TIMEOUT = 15000;
@@ -144,6 +149,10 @@ function reviewSummaryUrl(query, languageCode) {
     if (query.offtopic) {
         params.set("filter_offtopic_activity", "false");
     }
+    if (query.from || query.to) {
+        params.set("date_range_start", query.from || RANGE_MIN);
+        params.set("date_range_end", query.to || RANGE_MAX);
+    }
     return REVIEWS_API + "?" + params.toString();
 }
 
@@ -205,7 +214,7 @@ function parseAppInfo(data) {
 // ---------- lookup ----------
 
 function cacheKey(query) {
-    return [query.appId, query.purchase, query.offtopic ? 1 : 0].join("|");
+    return [query.appId, query.purchase, query.offtopic ? 1 : 0, query.from || "", query.to || ""].join("|");
 }
 
 async function lookup(query) {
@@ -218,6 +227,8 @@ async function lookup(query) {
     if (!resultCache[key]) {
         resultCache[key] = {
             appId: query.appId,
+            from: query.from,
+            to: query.to,
             summaries: {},
             failed: ["all"].concat(LANGUAGES.map((l) => l.code)),
         };
@@ -294,7 +305,8 @@ function showResult() {
     }
     if (currentResult.summaries.all.total === 0 && !currentApp) {
         $("results").hidden = true;
-        showNotice("Steam has no reviews for AppID " + currentResult.appId + ". Double-check the number?", false);
+        const when = currentResult.from || currentResult.to ? " " + rangeText(currentResult.from, currentResult.to) : "";
+        showNotice("Steam has no reviews for AppID " + currentResult.appId + when + ". Double-check the number?", false);
         return;
     }
     render();
@@ -457,6 +469,7 @@ function renderStats() {
     const rows = buildRows().filter((r) => !r.isOther);
 
     $("stat-total").textContent = formatCount(all.total);
+    $("stat-total-note").textContent = rangeText(currentResult.from, currentResult.to);
 
     if (all.total > 0) {
         $("stat-positive").textContent = Math.round(all.positive / all.total * 100) + "%";
@@ -745,6 +758,23 @@ function showPieTooltip(slice, x, y) {
     tip.style.top = (y + 14) + "px";
 }
 
+function formatDate(seconds) {
+    return new Date(seconds * 1000).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+}
+
+function rangeText(from, to) {
+    if (from && to) {
+        return formatDate(from) + " – " + formatDate(to);
+    }
+    if (from) {
+        return "since " + formatDate(from);
+    }
+    if (to) {
+        return "until " + formatDate(to);
+    }
+    return "all time";
+}
+
 function formatCount(n) {
     return n.toLocaleString("en-US");
 }
@@ -826,7 +856,10 @@ function downloadCsv() {
     const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "steam-reviews-by-language-" + currentResult.appId + ".csv";
+    const range = currentResult.from || currentResult.to
+        ? "-" + (currentResult.from ? dateInputValue(currentResult.from) : "start") + "_" + (currentResult.to ? dateInputValue(currentResult.to) : "now")
+        : "";
+    a.download = "steam-reviews-by-language-" + currentResult.appId + range + ".csv";
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
@@ -844,6 +877,37 @@ function parseAppId(text) {
     return appId > 0 && appId < 4294967296 ? appId : null;
 }
 
+// The URL holds Unix seconds, so a shared link covers the same moments in every time zone.
+function parseTimestamp(text) {
+    if (!/^\d+$/.test(text || "")) {
+        return null;
+    }
+    const seconds = Number(text);
+    return seconds >= RANGE_MIN && seconds <= RANGE_MAX ? seconds : null;
+}
+
+// The date inputs are in the viewer's local time: from the start of the first day to the end of the last.
+// Returns null for an empty input and NaN for a date that's still being typed or out of range.
+function readDateInput(input, endOfDay) {
+    if (!input.value) {
+        return null;
+    }
+    const match = input.value.match(/^(\d{4,})-(\d{2})-(\d{2})$/);
+    const year = match ? Number(match[1]) : 0;
+    if (year < 2000 || year > 2100) {
+        return NaN;
+    }
+    // The end of a day is one second before the next one starts, which also holds across DST changes.
+    const date = new Date(year, Number(match[2]) - 1, Number(match[3]) + (endOfDay ? 1 : 0));
+    return Math.floor(date.getTime() / 1000) - (endOfDay ? 1 : 0);
+}
+
+function dateInputValue(seconds) {
+    const date = new Date(seconds * 1000);
+    const pad = (n) => String(n).padStart(2, "0");
+    return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate());
+}
+
 function readQueryFromUrl() {
     const params = new URLSearchParams(window.location.search);
     // appID matches Steam Scout's own links, so old URLs keep working with the host swapped.
@@ -853,6 +917,8 @@ function readQueryFromUrl() {
         appId: appId,
         purchase: PURCHASE_TYPES.hasOwnProperty(purchase) ? purchase : "all",
         offtopic: params.get("offtopic") === "1",
+        from: parseTimestamp(params.get("from")),
+        to: parseTimestamp(params.get("to")),
     };
 }
 
@@ -865,6 +931,12 @@ function writeQueryToUrl(query) {
     if (query.offtopic) {
         params.set("offtopic", "1");
     }
+    if (query.from) {
+        params.set("from", query.from);
+    }
+    if (query.to) {
+        params.set("to", query.to);
+    }
     history.replaceState(null, "", "?" + params.toString());
 }
 
@@ -873,15 +945,36 @@ function queryFromForm() {
         appId: parseAppId($("app-input").value),
         purchase: $("purchase-select").value,
         offtopic: $("offtopic-check").checked,
+        from: readDateInput($("from-input"), false),
+        to: readDateInput($("to-input"), true),
     };
+}
+
+function showFormError(text) {
+    $("form-error").textContent = text;
+    $("form-error").hidden = false;
+}
+
+function checkDates(query) {
+    if (Number.isNaN(query.from) || Number.isNaN(query.to)) {
+        showFormError("Pick dates between 2000 and 2100, or leave them empty.");
+        return false;
+    }
+    if (query.from && query.to && query.from > query.to) {
+        showFormError("The start date is after the end date.");
+        return false;
+    }
+    return true;
 }
 
 function onSubmit(event) {
     event.preventDefault();
     const query = queryFromForm();
     if (!query.appId) {
-        $("form-error").textContent = "Enter a Steam AppID (the number in the store URL), or paste the store page link.";
-        $("form-error").hidden = false;
+        showFormError("Enter a Steam AppID (the number in the store URL), or paste the store page link.");
+        return;
+    }
+    if (!checkDates(query)) {
         return;
     }
     $("form-error").hidden = true;
@@ -889,6 +982,7 @@ function onSubmit(event) {
     lookup(query);
 }
 
+// Dates wait for Look up, so they stay as last submitted here.
 function onFilterChange() {
     if (currentQuery) {
         lookup(Object.assign({}, currentQuery, {
@@ -896,6 +990,17 @@ function onFilterChange() {
             offtopic: $("offtopic-check").checked,
         }));
     }
+}
+
+function onDateChange() {
+    $("clear-dates-button").hidden = !$("from-input").value && !$("to-input").value;
+}
+
+function clearDates() {
+    $("from-input").value = "";
+    $("to-input").value = "";
+    onDateChange();
+    $("from-input").focus();
 }
 
 function onSortClick(event) {
@@ -915,6 +1020,9 @@ function init() {
     $("lookup-form").addEventListener("submit", onSubmit);
     $("purchase-select").addEventListener("change", onFilterChange);
     $("offtopic-check").addEventListener("change", onFilterChange);
+    $("from-input").addEventListener("input", onDateChange);
+    $("to-input").addEventListener("input", onDateChange);
+    $("clear-dates-button").addEventListener("click", clearDates);
     $("hide-empty-check").addEventListener("change", renderTable);
     $("retry-button").addEventListener("click", () => {
         if (currentQuery) {
@@ -930,6 +1038,9 @@ function init() {
     const query = readQueryFromUrl();
     $("purchase-select").value = query.purchase;
     $("offtopic-check").checked = query.offtopic;
+    $("from-input").value = query.from ? dateInputValue(query.from) : "";
+    $("to-input").value = query.to ? dateInputValue(query.to) : "";
+    $("clear-dates-button").hidden = !query.from && !query.to;
     if (query.appId) {
         $("app-input").value = query.appId;
         lookup(query);
